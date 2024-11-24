@@ -46,6 +46,7 @@ local highlight = function()
 	-- Treesitter brackets
 	hl(0, "@punctuation.bracket", { fg = colors.red })
 	hl(0, "@punctuation.delimiter", { fg = colors.lgray })
+	hl(0, "@punctuation.special", { link = "@punctuation.bracket" })
 
 	-- Treesitter variables
 	hl(0, "@variable", { link = "@disabledHl" })
@@ -65,6 +66,9 @@ local highlight = function()
 	hl(0, "@type", { link = "@disabledHl" })
 	hl(0, "@type.definition", { link = "Type" })
 
+	-- Treesitter string
+	hl(0, "@string.escape", { link = "String" })
+
 	-- Lua specific
 	hl(0, "@variable.lua", { link = "@disabledHl" })
 	hl(0, "@property.lua", { link = "@disabledHl" })
@@ -73,5 +77,9 @@ local highlight = function()
 	-- Python specific
 	hl(0, "@constant.builtin.python", { link = "Constant" })
 	hl(0, "@attribute.python", { link = "Operator" })
+	hl(0, "pythonBuiltin", { link = "@disabledHl" })
+	hl(0, "pythonDecoratorName", { link = "@disabledHl" })
+	hl(0, "pythonDecorator", { link = "Operator" })
+	hl(0, "pythonInclude", { link = "Keyword" })
 end
 return highlight
