@@ -13,7 +13,6 @@ return {
 		cmd = { "TSUpdateSync", "TSUpdate", "TSInstall" },
 		opts_extend = { "ensure_installed" },
 		opts = {
-			auto_install = vim.fn.executable("git") == 1 and vim.fn.executable("tree-sitter") == 1,
 			highlight = { enable = true },
 			indent = { enable = true },
 			ensure_installed = {
