@@ -11,8 +11,6 @@ return {
 		opts = {
 			sources = {
 				"filesystem",
-				"buffers",
-				"document_symbols",
 			},
 			window = {
 				mappings = {

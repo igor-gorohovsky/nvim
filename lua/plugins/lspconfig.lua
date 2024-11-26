@@ -12,7 +12,7 @@ return {
 				keymap = {
 					manual_complete = "<M-l>",
 					jump_to_mark = "<Nop>",
-					recommended = true,
+					recommended = false,
 				},
 				completion = {
 					always = false,
@@ -21,6 +21,7 @@ return {
 		end,
 		config = function()
 			require("config.lspconfig")
+			require("config.coq")
 		end,
 	},
 	{
