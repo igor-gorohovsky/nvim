@@ -1,4 +1,5 @@
 local hl = vim.api.nvim_set_hl
+
 local colors = {
 	black = "#0A0E14",
 	gray = "#B3B1AD",
@@ -9,6 +10,7 @@ local colors = {
 	blue = "#59C2FF",
 	comment = "#626A73",
 	string = "#C2D94C",
+	error = "#B10102",
 }
 
 local highlight = function()
@@ -42,7 +44,7 @@ local highlight = function()
 	-- hl(0, "@function", { fg = colors.orange })
 	hl(0, "@function.call", { link = "@disabledHl" })
 	hl(0, "@function.method.call", { link = "@disabledHl" })
-	hl(0, "@constructor", { link = "Function" })
+	hl(0, "@constructor", {})
 
 	-- Treesitter brackets
 	hl(0, "@punctuation.bracket", { link = "Bracket" })
@@ -80,11 +82,25 @@ local highlight = function()
 
 	-- Python specific
 	hl(0, "@constant.builtin.python", { link = "Constant" })
-	hl(0, "@attribute.python", { link = "Operator" })
-	hl(0, "pythonBuiltin", { link = "@disabledHl" })
-	hl(0, "pythonDecoratorName", { link = "@disabledHl" })
-	hl(0, "pythonDecorator", { link = "Operator" })
-	hl(0, "pythonInclude", { link = "Keyword" })
-	hl(0, "pythonClass", { fg = colors.blue })
+	hl(0, "@attribute.python", {})
+	hl(0, "@type.definition.python", { link = "Type" })
+
+	-- Bash specific
+	hl(0, "@variable.parameter.bash", { link = "String" })
+
+	-- Dockerfile specific
+	hl(0, "@property.dockerfile", { link = "@disableHl" })
+
+	-- Yaml specific
+	hl(0, "@property.yaml", { link = "Keyword" })
+	hl(0, "@property.dockerfile", { link = "@disableHl" })
+
+	-- Diagnostic
+	-- hl(0, "DiagnosticFloatingError", { fg = colors.error })
+	hl(0, "DiagnosticUnderlineError", { undercurl = true, sp = colors.red })
+	--
+
+	-- Telescope
+	hl(0, "TelescopeMultiSelection", { fg = colors.yellow })
 end
 return highlight
