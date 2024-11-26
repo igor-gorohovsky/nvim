@@ -4,13 +4,23 @@ return {
 		build = ":TSUpdate",
 		lazy = vim.fn.argc(-1) == 0,
 		dependencies = {
-			{ "nvim-treesitter/nvim-treesitter-textobjects", lazy = true },
+			{ "nvim-treesitter/nvim-treesitter-textobjects" },
+		},
+		cmd = {
+			"TSBufEnable",
+			"TSBufDisable",
+			"TSBufToggle",
+			"TSEnable",
+			"TSDisable",
+			"TSToggle",
+			"TSConfigInfo",
+			"TSEditQuery",
+			"TSEditQueryUserAfter",
 		},
 		init = function(plugin)
 			require("lazy.core.loader").add_to_rtp(plugin)
 			require("nvim-treesitter.query_predicates")
 		end,
-		cmd = { "TSUpdateSync", "TSUpdate", "TSInstall" },
 		opts_extend = { "ensure_installed" },
 		opts = {
 			highlight = { enable = true },

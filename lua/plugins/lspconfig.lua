@@ -11,6 +11,7 @@ return {
 				auto_start = true,
 				keymap = {
 					manual_complete = "<M-l>",
+					jump_to_mark = "<Nop>",
 					recommended = true,
 				},
 				completion = {

@@ -12,11 +12,13 @@ M.on_attach = function(client, bufnr)
 		-- Disable hover in favor of Pyright
 		client.server_capabilities.hoverProvider = false
 	end
+
 	map("n", "gd", vim.lsp.buf.definition, opts("Go to definition"))
-	map("n", "gr", vim.lsp.buf.references, opts("Show references"))
+	-- map("n", "gr", vim.lsp.buf.references, opts("Show references"))
 	map("n", "K", vim.lsp.buf.signature_help, opts("Show signature help"))
 	map({ "n", "v" }, "<leader>ca", vim.lsp.buf.code_action, opts("Code action"))
-	-- map("n", "ge", vim.lsp.diagnostic.get, opts("Show diagnostics"))
+	map("n", "<leader>ld", vim.diagnostic.open_float)
+	-- map("n", "<leader>lr")
 end
 
 -- ------------------------------------------------------------------------------

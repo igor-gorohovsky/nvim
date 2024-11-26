@@ -17,6 +17,11 @@ return {
 					width = 0.87,
 					height = 0.80,
 				},
+				file_ignore_patterns = {
+					"node_modules",
+					".git",
+					".venv",
+				},
 			},
 		},
 	},

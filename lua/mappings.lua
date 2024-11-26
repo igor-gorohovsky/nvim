@@ -9,15 +9,19 @@ map("n", "<leader>e", "<Cmd>Neotree position=float<CR>")
 
 -- Telescope File and Vim pickers
 local builtin = require("telescope.builtin")
-map("n", "<leader><leader>", builtin.find_files)
+local utils = require("utils.telescope")
+
+map("n", "<leader><leader>", utils.find_files)
 map("n", "<leader>fb", builtin.buffers)
 map("n", "<leader>fw", builtin.live_grep)
 map("n", "<leader>fh", builtin.highlights)
 map("n", "<leader>fr", builtin.registers)
+map("n", "<leader>fk", builtin.keymaps)
 
 -- Telescope LSP pickers
 
 map("n", "ss", builtin.lsp_document_symbols)
+map("n", "gr", builtin.lsp_references)
 map("n", "<leader>fd", builtin.diagnostics)
 
 -- Hop
