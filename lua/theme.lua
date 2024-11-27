@@ -11,6 +11,7 @@ local colors = {
 	comment = "#626A73",
 	string = "#C2D94C",
 	error = "#B10102",
+	indent = "#181A1D",
 }
 
 local highlight = function()
@@ -71,6 +72,9 @@ local highlight = function()
 
 	-- Treesitter string
 	hl(0, "@string.escape", { link = "String" })
+
+	-- Indent char
+	hl(0, "Indent", { fg = colors.indent })
 
 	-- Lua specific
 	hl(0, "@variable.lua", { link = "@disabledHl" })

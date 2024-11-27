@@ -1,6 +1,5 @@
 require("config.lazy")
 require("mappings")
-require("theme")()
 
 local api = vim.api
 
