@@ -2,10 +2,12 @@ local map = vim.keymap.set
 
 -- Common
 map("n", "<leader>q", ":q<cr>")
+map("n", "<leader>w", ":w<cr>")
 map("n", "s", "<Nop>") -- no map to map with symbols search
 
 -- Neotree
 map("n", "<leader>e", "<Cmd>Neotree position=float<CR>")
+map("n", "<leader>r", "<Cmd>Neotree reveal position=float<cr>")
 
 -- Telescope File and Vim pickers
 local builtin = require("telescope.builtin")
@@ -22,8 +24,12 @@ map("n", "<leader>fk", builtin.keymaps)
 
 map("n", "ss", builtin.lsp_document_symbols)
 map("n", "gr", builtin.lsp_references)
+-- TODO: add mapping for defenitions though telescope
 map("n", "<leader>fd", builtin.diagnostics)
 map("n", "<leader>fW", "<cmd>Telescope workspaces<cr>")
+
+-- LSP symbol rename
+map("n", "<leader>lr", vim.lsp.buf.rename)
 
 -- Hop
 local hop = require("hop")
