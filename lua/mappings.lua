@@ -19,6 +19,7 @@ map("n", "<leader>fw", builtin.live_grep)
 map("n", "<leader>fh", builtin.highlights)
 map("n", "<leader>fr", builtin.registers)
 map("n", "<leader>fk", builtin.keymaps)
+map("n", "<leader>fj", builtin.jumplist)
 
 -- Telescope LSP pickers
 
