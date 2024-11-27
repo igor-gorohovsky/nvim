@@ -2,7 +2,6 @@ return {
 	{
 		"nvim-treesitter/nvim-treesitter",
 		build = ":TSUpdate",
-		lazy = vim.fn.argc(-1) == 0,
 		dependencies = {
 			{ "nvim-treesitter/nvim-treesitter-textobjects" },
 		},
@@ -47,20 +46,64 @@ return {
 				"yaml",
 				"toml",
 			},
-			textobjexts = {
-				select = {
-					enable = true,
-					lookahead = true,
-					keymaps = {
-						["af"] = "@function.outer",
-						["if"] = "@function.inner",
-						["ac"] = "@class.outer",
-					},
-				},
-			},
 		},
 		config = function(_, opts)
 			require("nvim-treesitter.configs").setup(opts)
+		end,
+	},
+	{
+		"nvim-treesitter/nvim-treesitter-textobjects",
+		lazy = true,
+		config = function()
+			require("nvim-treesitter.configs").setup({
+				textobjects = {
+					select = {
+						enable = true,
+
+						-- Automatically jump forward to textobj, similar to targets.vim
+						lookahead = true,
+
+						keymaps = {
+							["l="] = { query = "@assignment.lhs", desc = "Select left hand side of an assignment" },
+							["r="] = { query = "@assignment.rhs", desc = "Select right hand side of an assignment" },
+
+							["aa"] = { query = "@parameter.outer", desc = "Select outer part of a parameter/argument" },
+							["ia"] = { query = "@parameter.inner", desc = "Select inner part of a parameter/argument" },
+
+							["ai"] = { query = "@conditional.outer", desc = "Select outer part of a conditional" },
+							["ii"] = { query = "@conditional.inner", desc = "Select inner part of a conditional" },
+
+							["al"] = { query = "@loop.outer", desc = "Select outer part of a loop" },
+							["il"] = { query = "@loop.inner", desc = "Select inner part of a loop" },
+
+							["af"] = {
+								query = "@function.outer",
+								desc = "Select outer part of a method/function definition",
+							},
+							["if"] = {
+								query = "@function.inner",
+								desc = "Select inner part of a method/function definition",
+							},
+
+							["ac"] = { query = "@class.outer", desc = "Select outer part of a class" },
+							["ic"] = { query = "@class.inner", desc = "Select inner part of a class" },
+						},
+					},
+					swap = {
+						enable = true,
+						swap_next = {
+							["<leader>na"] = "@parameter.inner", -- swap parameters/argument with next
+							["<leader>nf"] = "@function.outer", -- swap function with next
+							["<leader>nc"] = "@class.outer",
+						},
+						swap_previous = {
+							["<leader>pa"] = "@parameter.inner", -- swap parameters/argument with prev
+							["<leader>pf"] = "@function.outer", -- swap function with previous
+							["<leader>pc"] = "@class.outer",
+						},
+					},
+				},
+			})
 		end,
 	},
 }
