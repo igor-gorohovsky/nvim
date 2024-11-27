@@ -10,6 +10,8 @@ o.relativenumber = true
 o.termguicolors = true
 o.laststatus = 0
 o.clipboard = "unnamedplus"
+o.splitbelow = true
+o.splitright = true
 
 g.mapleader = " "
 
