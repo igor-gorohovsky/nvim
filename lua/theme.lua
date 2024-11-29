@@ -12,12 +12,13 @@ local colors = {
 	string = "#C2D94C",
 	error = "#B10102",
 	indent = "#181A1D",
+	visual = "#1C2631",
+	line = "#1E2024",
 }
 
-local highlight = function()
-	-- Custom group
-	hl(0, "@disabledHl", { fg = colors.lgray })
+local M = {}
 
+M.hl_base = function()
 	-- Common
 	hl(0, "Normal", { fg = colors.gray, bg = colors.black })
 	hl(0, "Comment", { fg = colors.comment, italic = true })
@@ -26,7 +27,7 @@ local highlight = function()
 	hl(0, "Character", { fg = colors.string })
 
 	hl(0, "Constant", { fg = colors.yellow })
-	hl(0, "Special", { link = "@disabledHl" })
+	hl(0, "Special", {})
 
 	hl(0, "Function", { fg = colors.orange })
 
@@ -41,10 +42,15 @@ local highlight = function()
 
 	hl(0, "Type", { fg = colors.blue })
 
+	hl(0, "CursorLine", { bg = colors.line })
+	hl(0, "Visual", { bg = colors.visual })
+	hl(0, "Indent", { fg = colors.indent })
+end
+
+M.hl_langs = function()
 	-- Treesitter Functions
-	-- hl(0, "@function", { fg = colors.orange })
-	hl(0, "@function.call", { link = "@disabledHl" })
-	hl(0, "@function.method.call", { link = "@disabledHl" })
+	hl(0, "@function.call", {})
+	hl(0, "@function.method.call", {})
 	hl(0, "@constructor", {})
 
 	-- Treesitter brackets
@@ -53,32 +59,29 @@ local highlight = function()
 	hl(0, "@punctuation.special", { link = "Bracket" })
 
 	-- Treesitter variables
-	hl(0, "@variable", { link = "@disabledHl" })
-	hl(0, "@variable.parameter", { link = "@disabledHl" })
-	hl(0, "@variable.builtin", { link = "@disabledHl" })
-	hl(0, "@variable.member", { link = "@disabledHl" })
+	hl(0, "@variable", {})
+	hl(0, "@variable.parameter", {})
+	hl(0, "@variable.builtin", {})
+	hl(0, "@variable.member", {})
 
 	-- Treesitter modules
-	hl(0, "@module", { link = "@disabledHl" })
-	hl(0, "@module.builtin", { link = "@disabledHl" })
+	hl(0, "@module", {})
+	hl(0, "@module.builtin", {})
 
 	-- Treesitter const
-	hl(0, "@constant", { link = "@disabledHl" })
+	hl(0, "@constant", {})
 	hl(0, "@constant.builtin", { link = "Constant" })
 
 	-- Treesitter class
-	hl(0, "@type", { link = "@disabledHl" })
+	hl(0, "@type", {})
 	hl(0, "@type.definition", { link = "Type" })
 
 	-- Treesitter string
 	hl(0, "@string.escape", { link = "String" })
 
-	-- Indent char
-	hl(0, "Indent", { fg = colors.indent })
-
 	-- Lua specific
-	hl(0, "@variable.lua", { link = "@disabledHl" })
-	hl(0, "@property.lua", { link = "@disabledHl" })
+	hl(0, "@variable.lua", {})
+	hl(0, "@property.lua", {})
 	hl(0, "@constructor.lua", { link = "Bracket" })
 	hl(0, "luaTable", { link = "Bracket" })
 	hl(0, "luaParen", { link = "Bracket" })
@@ -93,18 +96,36 @@ local highlight = function()
 	hl(0, "@variable.parameter.bash", { link = "String" })
 
 	-- Dockerfile specific
-	hl(0, "@property.dockerfile", { link = "@disableHl" })
+	hl(0, "@property.dockerfile", {})
 
 	-- Yaml specific
 	hl(0, "@property.yaml", { link = "Keyword" })
-	hl(0, "@property.dockerfile", { link = "@disableHl" })
+	hl(0, "@property.dockerfile", {})
+end
 
-	-- Diagnostic
-	-- hl(0, "DiagnosticFloatingError", { fg = colors.error })
-	hl(0, "DiagnosticUnderlineError", { undercurl = true, sp = colors.red })
-	--
+M.hl_lsp = function()
+	hl(0, "DiagnosticError", { fg = colors.error })
+	hl(0, "DiagnosticUnderlineError", { undercurl = true })
+end
+
+M.hl_plugins = function()
+	-- NeoTree
+	hl(0, "NeoTreeDirectoryName", { fg = colors.gray })
+	hl(0, "NeoTreeDirectoryIcon", { fg = colors.blue })
+	hl(0, "NeoTreeGitModified", { fg = colors.red })
+	hl(0, "NeoTreeTitleBar", { fg = colors.gray })
+	hl(0, "NeoTreeCursorLine", { fg = colors.yellow })
 
 	-- Telescope
 	hl(0, "TelescopeMultiSelection", { fg = colors.yellow })
+	hl(0, "TelescopeResultsMethod", { fg = colors.orange })
+	hl(0, "TelescopeResultsClass", { fg = colors.blue })
 end
+
+local highlight = function()
+	for _, v in pairs(M) do
+		v()
+	end
+end
+
 return highlight

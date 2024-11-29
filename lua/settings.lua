@@ -12,7 +12,8 @@ o.laststatus = 0
 o.clipboard = "unnamedplus"
 o.splitbelow = true
 o.splitright = true
-o.swapfile = true
+o.swapfile = false
+o.cursorline = true
 
 g.mapleader = " "
 

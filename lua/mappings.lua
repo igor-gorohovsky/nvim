@@ -23,7 +23,7 @@ map("n", "<leader>fj", builtin.jumplist)
 map("n", "<leader>fs", "<cmd>SessionManager load_session<cr>")
 
 -- Telescope LSP pickers
-map("n", "ss", builtin.lsp_document_symbols)
+map("n", "ss", utils.lsp_document_symbols)
 map("n", "gr", builtin.lsp_references)
 map("n", "<leader>fd", builtin.diagnostics)
 map("n", "<leader>fW", "<cmd>Telescope workspaces<cr>")
