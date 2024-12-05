@@ -38,7 +38,7 @@ M.hl_base = function()
 	hl(0, "Label", { fg = colors.red })
 	hl(0, "Repeat", { fg = colors.red })
 	hl(0, "Statement", { fg = colors.red })
-	hl(0, "Bracket", { fg = colors.red })
+	hl(0, "Bracket", {})
 
 	hl(0, "Type", { fg = colors.blue })
 
@@ -48,6 +48,9 @@ M.hl_base = function()
 end
 
 M.hl_langs = function()
+	-- Custom
+	hl(0, "@interpolation", { fg = colors.gray })
+
 	-- Treesitter Functions
 	hl(0, "@function.call", {})
 	hl(0, "@function.method.call", {})
@@ -55,7 +58,7 @@ M.hl_langs = function()
 
 	-- Treesitter brackets
 	hl(0, "@punctuation.bracket", { link = "Bracket" })
-	hl(0, "@punctuation.delimiter", { fg = colors.lgray })
+	hl(0, "@punctuation.delimiter", { link = "Bracket" })
 	hl(0, "@punctuation.special", { link = "Bracket" })
 
 	-- Treesitter variables
@@ -70,7 +73,7 @@ M.hl_langs = function()
 
 	-- Treesitter const
 	hl(0, "@constant", {})
-	hl(0, "@constant.builtin", { link = "Constant" })
+	hl(0, "@constant.builtin", {})
 
 	-- Treesitter class
 	hl(0, "@type", {})
@@ -88,9 +91,9 @@ M.hl_langs = function()
 	hl(0, "luaFunc", { link = "Function" })
 
 	-- Python specific
-	hl(0, "@constant.builtin.python", { link = "Constant" })
 	hl(0, "@attribute.python", {})
 	hl(0, "@type.definition.python", { link = "Type" })
+	hl(0, "@NonePy.python", { link = "Constant" })
 
 	-- Bash specific
 	hl(0, "@variable.parameter.bash", { link = "String" })
