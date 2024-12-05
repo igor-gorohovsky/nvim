@@ -19,7 +19,6 @@ vim.opt.rtp:prepend(lazypath)
 -- loading lazy.nvim so that mappings are correct.
 -- This is also a good place to setup other settings (vim.opt)
 require("settings")
-require("theme")()
 vim.g.mapleader = " "
 vim.g.maplocalleader = "\\"
 
@@ -29,5 +28,8 @@ require("lazy").setup({
 		-- import your plugins
 		{ import = "plugins" },
 	},
+	install = { colorscheme = { "pustota" } },
 	checker = { enabled = false },
 })
+
+vim.cmd.colorscheme("pustota")

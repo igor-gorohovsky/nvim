@@ -31,3 +31,6 @@ api.nvim_create_autocmd({ "WinLeave" }, {
 		o.cursorline = false
 	end,
 })
+
+-- Create blank hl group for indent plugin
+vim.api.nvim_set_hl(0, "Indent", {})

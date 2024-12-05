@@ -11,5 +11,9 @@ return {
 				enabled = false,
 			},
 		},
+		config = function(_, opts)
+			require("pustota").ibl_setup()
+			require("ibl").setup(opts)
+		end,
 	},
 }
