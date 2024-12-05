@@ -1,5 +1,6 @@
 local o = vim.o
 local g = vim.g
+local api = vim.api
 
 o.expandtab = true
 o.smartindent = true
@@ -18,3 +19,15 @@ o.cursorline = true
 g.mapleader = " "
 
 vim.wo.wrap = false
+
+-- Show cursorline only in current window
+api.nvim_create_autocmd({ "VimEnter", "WinEnter", "BufWinEnter" }, {
+	callback = function()
+		o.cursorline = true
+	end,
+})
+api.nvim_create_autocmd({ "WinLeave" }, {
+	callback = function()
+		o.cursorline = false
+	end,
+})
