@@ -104,6 +104,11 @@ require("lspconfig").ruff.setup({
 	on_attach = M.on_attach,
 	on_init = M.on_init,
 	capabilities = M.capabilities,
+	init_options = {
+		settings = {
+			lineLength = 100,
+		},
+	},
 })
 
 -- -----------------------------------------------------------------------------
