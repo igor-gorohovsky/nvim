@@ -9,12 +9,19 @@ return {
 			-- "3rd/image.nvim", -- Optional image support in preview window: See `# Preview Mode` for more information
 		},
 		opts = {
+			close_if_last_window = true,
+			enable_diagnostics = false,
 			sources = {
 				"filesystem",
 			},
 			window = {
 				mappings = {
 					["l"] = { "open" },
+				},
+			},
+			filesystem = {
+				filtered_items = {
+					visible = true,
 				},
 			},
 		},

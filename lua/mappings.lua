@@ -6,8 +6,8 @@ map("n", "<leader>w", ":w<cr>")
 map("n", "s", "<Nop>") -- no map to map with symbols search
 
 -- Neotree
-map("n", "<leader>e", "<Cmd>Neotree position=float<CR>")
-map("n", "<leader>r", "<Cmd>Neotree reveal position=float<cr>")
+map("n", "<leader>e", "<Cmd>Neotree <cr>")
+map("n", "<leader>r", "<Cmd>Neotree reveal <cr>")
 
 -- Telescope File and Vim pickers
 local builtin = require("telescope.builtin")
