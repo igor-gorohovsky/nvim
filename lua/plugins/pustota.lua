@@ -1,3 +1,3 @@
 return {
-	"igor-gorohovsky/pustota.nvim",
+	"pustota.nvim",
 }
