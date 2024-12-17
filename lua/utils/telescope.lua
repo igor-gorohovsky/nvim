@@ -2,7 +2,7 @@ local M = {}
 local builtin = require("telescope.builtin")
 
 M.find_files = function(opts)
-	return builtin.find_files({ hidden = true })
+	return builtin.find_files({ hidden = true, no_ignore = true })
 end
 
 M.lsp_document_symbols = function(opts)
