@@ -2,26 +2,8 @@ return {
 	{
 		"neovim/nvim-lspconfig",
 		lazy = false,
-		dependencies = {
-			{ "ms-jpq/coq_nvim", branch = "coq" },
-			{ "ms-jpq/coq.artifacts", branch = "artifacts" },
-		},
-		init = function()
-			vim.g.coq_settings = {
-				auto_start = true,
-				keymap = {
-					manual_complete = "<M-l>",
-					jump_to_mark = "<Nop>",
-					recommended = false,
-				},
-				completion = {
-					always = false,
-				},
-			}
-		end,
 		config = function()
 			require("config.lspconfig")
-			require("config.coq")
 		end,
 	},
 	{
@@ -37,5 +19,16 @@ return {
 				timeout_ms = 500,
 			},
 		},
+	},
+	{
+		"echasnovski/mini.completion",
+		version = "*",
+		config = function(_, opts)
+			opts = {
+				mappings = { force_twostep = "<M-l>" },
+				delay = { completion = 1000000, info = 1000000, signature = 1000000 }, -- set large values to disable auto completion
+			}
+			require("mini.completion").setup(opts)
+		end,
 	},
 }
