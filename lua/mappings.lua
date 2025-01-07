@@ -6,8 +6,8 @@ map("n", "<leader>w", ":w<cr>")
 map("n", "s", "<Nop>") -- no map to map with symbols search
 
 -- Neotree
-map("n", "<leader>e", "<Cmd>Neotree <cr>")
-map("n", "<leader>r", "<Cmd>Neotree reveal <cr>")
+-- map("n", "<leader>e", "<Cmd>Neotree <cr>")
+-- map("n", "<leader>r", "<Cmd>Neotree reveal <cr>")
 
 -- Telescope File and Vim pickers
 local builtin = require("telescope.builtin")
@@ -27,7 +27,6 @@ map("n", "ss", utils.lsp_document_symbols)
 map("n", "gr", builtin.lsp_references)
 map("n", "gd", builtin.lsp_definitions)
 map("n", "<leader>fd", builtin.diagnostics)
-map("n", "<leader>fW", "<cmd>Telescope workspaces<cr>")
 
 -- LSP symbol rename
 map("n", "<leader>lr", vim.lsp.buf.rename)
