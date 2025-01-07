@@ -92,6 +92,7 @@ lspconfig.basedpyright.setup({
 					reportOptionalMemberAccess = "none",
 					reportOptionalSubscript = "none",
 					reportPrivateImportUsage = "none",
+					reportTypedDictNotRequiredAccess = "none",
 				},
 			},
 		},
@@ -109,6 +110,20 @@ require("lspconfig").ruff.setup({
 			lineLength = 100,
 		},
 	},
+})
+
+--------------------------------- Lexical ------------------------------------
+local util = require("lspconfig").util
+
+require("lspconfig").lexical.setup({
+	cmd = { "/home/igorohovsky/lexical/_build/dev/package/lexical/bin/start_lexical.sh" },
+	root_dir = function(fname)
+		return util.root_pattern("mix.exs", ".git")(fname) or vim.fn.getcwd()
+	end,
+	filetypes = { "elixir", "eelixir", "heex" },
+	on_attach = M.on_attach,
+	on_init = M.on_init,
+	capabilities = M.capabilities,
 })
 
 -- -----------------------------------------------------------------------------
