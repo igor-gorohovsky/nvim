@@ -28,6 +28,7 @@ return {
 		},
 		opts = function()
 			local cmp = require("cmp")
+			local compare = cmp.config.compare
 			local sources = cmp.config.sources({
 				{ name = "nvim_lsp" },
 				{ name = "path" },
@@ -43,7 +44,24 @@ return {
 			local completion = {
 				autocomplete = false,
 			}
-			return { sources = sources, window = window, mapping = mappings, completion = completion }
+			local comparators = {
+				compare.locality,
+				compare.recently_used,
+				compare.exact,
+				compare.score,
+				compare.offset,
+				compare.order,
+			}
+			return {
+				sources = sources,
+				window = window,
+				mapping = mappings,
+				completion = completion,
+				sorting = {
+					priority_weight = 1,
+					comparators = comparators,
+				},
+			}
 		end,
 	},
 }
