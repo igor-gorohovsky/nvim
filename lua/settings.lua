@@ -16,9 +16,8 @@ o.splitright = true
 o.swapfile = false
 o.cursorline = true
 o.undofile = true
-
 g.mapleader = " "
-
+o.completeopt = "menuone,noselect,noinsert,popup"
 vim.wo.wrap = false
 
 -- Show cursorline only in current window

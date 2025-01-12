@@ -13,12 +13,8 @@ M.on_attach = function(client, bufnr)
 		client.server_capabilities.hoverProvider = false
 	end
 
-	-- map("n", "gd", vim.lsp.buf.definition, opts("Go to definition"))
-	-- map("n", "gr", vim.lsp.buf.references, opts("Show references"))
-	map("n", "K", vim.lsp.buf.signature_help, opts("Show signature help"))
 	map({ "n", "v" }, "<leader>ca", vim.lsp.buf.code_action, opts("Code action"))
 	map("n", "<leader>ld", vim.diagnostic.open_float)
-	-- map("n", "<leader>lr")
 end
 
 -- ------------------------------------------------------------------------------
@@ -32,8 +28,12 @@ end
 
 -- ------------------------------------------------------------------------------
 
-M.capabilities = vim.lsp.protocol.make_client_capabilities()
-
+-- M.capabilities = vim.tbl_deep_extend(
+-- 	"force",
+-- 	vim.lsp.protocol.make_client_capabilities(),
+-- 	require("cmp_nvim_lsp").default_capabilities()
+-- )
+M.capabilities = require("cmp_nvim_lsp").default_capabilities()
 -- ------------------------------------------------------------------------------
 
 M.defaults = function()
@@ -81,6 +81,9 @@ lspconfig.basedpyright.setup({
 	capabilities = M.capabilities,
 	settings = {
 		basedpyright = {
+			disableOrganizeImports = true,
+		},
+		python = {
 			analysis = {
 				typeCheckingMode = "basic",
 				autoImportCompletions = true,

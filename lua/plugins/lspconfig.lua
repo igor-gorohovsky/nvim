@@ -1,45 +1,7 @@
 return {
 	{
 		"neovim/nvim-lspconfig",
-		dependencies = {
-			"ms-jpq/coq_nvim",
-		},
 		lazy = false,
-		init = function()
-			vim.g.coq_settings = {
-				auto_start = true,
-				keymap = {
-					recommended = true,
-					pre_select = false,
-					manual_complete = "<M-l>",
-				},
-				completion = {
-					always = false,
-				},
-				clients = {
-					buffers = {
-						enabled = false,
-					},
-					registers = {
-						enabled = false,
-					},
-					tmux = {
-						enabled = false,
-					},
-					tabnine = {
-						enabled = false,
-					},
-					tree_sitter = {
-						enabled = false,
-					},
-				},
-				display = {
-					pum = {
-						fast_close = true,
-					},
-				},
-			}
-		end,
 		config = function()
 			require("config.lspconfig")
 		end,
@@ -57,5 +19,31 @@ return {
 				timeout_ms = 500,
 			},
 		},
+	},
+	{
+		"hrsh7th/nvim-cmp",
+		dependencies = {
+			"hrsh7th/cmp-nvim-lsp",
+			"hrsh7th/cmp-path",
+		},
+		opts = function()
+			local cmp = require("cmp")
+			local sources = cmp.config.sources({
+				{ name = "nvim_lsp" },
+				{ name = "path" },
+			})
+			local window = {
+				completion = cmp.config.window.bordered(),
+				documentation = cmp.config.window.bordered(),
+			}
+			local mappings = cmp.mapping.preset.insert({
+				["<M-l>"] = cmp.mapping.complete(),
+				["<CR>"] = cmp.mapping.confirm({ select = true }),
+			})
+			local completion = {
+				autocomplete = false,
+			}
+			return { sources = sources, window = window, mapping = mappings, completion = completion }
+		end,
 	},
 }
