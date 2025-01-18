@@ -1,3 +1,6 @@
 vim.api.nvim_set_hl(0, "Folded", {})
 vim.api.nvim_set_hl(0, "CursorLineNr", { bg = "NvimDarkGrey3" })
 vim.api.nvim_set_hl(0, "CursorLine", {})
+vim.api.nvim_set_hl(0, "DiagnosticUnderlineError", { undercurl = true, sp = "#B10102" })
+vim.api.nvim_set_hl(0, "DiagnosticUnderlineWarning", { undercurl = true })
+vim.api.nvim_set_hl(0, "DiagnosticUnderlineWarning", { undercurl = true })

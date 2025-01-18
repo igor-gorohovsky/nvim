@@ -18,11 +18,6 @@ o.cursorline = true
 o.undofile = true
 o.completeopt = "menuone,noselect,noinsert,popup"
 
-o.foldcolumn = "0"
-o.foldenable = false
-o.foldlevel = 99
-o.foldlevelstart = 99
-
 g.mapleader = " "
 vim.wo.wrap = false
 
