@@ -45,6 +45,9 @@ return {
 				"xml",
 				"yaml",
 				"toml",
+				"elixir",
+				"eex",
+				"heex",
 			},
 		},
 		config = function(_, opts)

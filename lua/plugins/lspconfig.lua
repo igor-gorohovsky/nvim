@@ -14,6 +14,7 @@ return {
 				python = {
 					lsp_format = "first",
 				},
+				javascript = { "prettierd", "prettier", stop_after_first = true },
 			},
 			format_on_save = {
 				timeout_ms = 500,
@@ -25,6 +26,7 @@ return {
 		dependencies = {
 			"hrsh7th/cmp-nvim-lsp",
 			"hrsh7th/cmp-path",
+			"lukas-reineke/cmp-under-comparator",
 		},
 		opts = function()
 			local cmp = require("cmp")
@@ -45,12 +47,12 @@ return {
 				autocomplete = false,
 			}
 			local comparators = {
-				compare.locality,
-				compare.recently_used,
+				compare.offset,
 				compare.exact,
 				compare.score,
-				compare.offset,
-				compare.order,
+				compare.recently_used,
+				require("cmp-under-comparator").under,
+				compare.kind,
 			}
 			return {
 				sources = sources,

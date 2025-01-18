@@ -28,12 +28,16 @@ end
 
 -- ------------------------------------------------------------------------------
 
--- M.capabilities = vim.tbl_deep_extend(
--- 	"force",
--- 	vim.lsp.protocol.make_client_capabilities(),
--- 	require("cmp_nvim_lsp").default_capabilities()
--- )
-M.capabilities = require("cmp_nvim_lsp").default_capabilities()
+M.capabilities = vim.tbl_deep_extend(
+	"force",
+	vim.lsp.protocol.make_client_capabilities(),
+	require("cmp_nvim_lsp").default_capabilities()
+)
+
+M.capabilities.textDocument.foldingRange = {
+	dynamicRegistration = false,
+	lineFoldingOnly = true,
+}
 -- ------------------------------------------------------------------------------
 
 M.defaults = function()
@@ -111,6 +115,10 @@ require("lspconfig").ruff.setup({
 	init_options = {
 		settings = {
 			lineLength = 100,
+			organizeImports = true,
+			lint = {
+				enable = false,
+			},
 		},
 	},
 })
@@ -128,6 +136,8 @@ require("lspconfig").lexical.setup({
 	on_init = M.on_init,
 	capabilities = M.capabilities,
 })
+
+-------------------------------- JS -----------------------------------------
 
 -- -----------------------------------------------------------------------------
 

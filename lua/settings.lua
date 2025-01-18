@@ -8,7 +8,7 @@ o.tabstop = 4
 o.shiftwidth = 4
 
 o.relativenumber = true
-o.termguicolors = true
+o.termguicolors = false
 o.laststatus = 0
 o.clipboard = "unnamedplus"
 o.splitbelow = true
@@ -16,8 +16,14 @@ o.splitright = true
 o.swapfile = false
 o.cursorline = true
 o.undofile = true
-g.mapleader = " "
 o.completeopt = "menuone,noselect,noinsert,popup"
+
+o.foldcolumn = "0"
+o.foldenable = false
+o.foldlevel = 99
+o.foldlevelstart = 99
+
+g.mapleader = " "
 vim.wo.wrap = false
 
 -- Show cursorline only in current window
