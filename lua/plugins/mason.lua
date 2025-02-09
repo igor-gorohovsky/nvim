@@ -3,6 +3,7 @@ return {
 	dependencies = {
 		"williamboman/mason-lspconfig.nvim",
 		"neovim/nvim-lspconfig",
+		"nvimtools/none-ls.nvim",
 	},
 	config = function()
 		local custom_lspconfig = require("config.lspconfig")
@@ -36,6 +37,18 @@ return {
 					},
 				})
 			end,
+		})
+
+		local null_ls = require("null-ls")
+		null_ls.setup({
+			sources = {
+				null_ls.builtins.diagnostics.mypy.with({
+					extra_args = function()
+						local virtual_env = os.getenv("VIRTUAL_ENV") or os.getenv("CONDA_DEFAULT_ENV") or "/usr"
+						return { "--python-executable", virtual_env .. "/bin/python3" }
+					end,
+				}),
+			},
 		})
 	end,
 }

@@ -6,11 +6,6 @@ M.on_attach = function(client, bufnr)
 		return { buffer = bufnr, desc = "LSP " .. desc }
 	end
 
-	if client.name == "ruff" then
-		-- Disable hover in favor of Pyright
-		client.server_capabilities.hoverProvider = false
-	end
-
 	map({ "n", "v" }, "<leader>ca", vim.lsp.buf.code_action, opts("Code action"))
 	map("n", "<leader>ld", vim.diagnostic.open_float)
 end
