@@ -8,7 +8,7 @@ o.tabstop = 4
 o.shiftwidth = 4
 
 o.relativenumber = true
-o.termguicolors = false
+o.termguicolors = true
 o.laststatus = 0
 o.clipboard = "unnamedplus"
 o.splitbelow = true
@@ -17,6 +17,7 @@ o.swapfile = false
 o.cursorline = true
 o.undofile = true
 o.completeopt = "menuone,noselect,noinsert,popup"
+-- o.cmdheight = 0
 
 g.mapleader = " "
 vim.wo.wrap = false
