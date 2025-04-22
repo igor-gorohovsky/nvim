@@ -12,7 +12,9 @@ return {
 			formatters_by_ft = {
 				lua = { "stylua" },
 				python = {
-					lsp_format = "first",
+					"ruff_fix",
+					"ruff_format",
+					"ruff_organize_imports",
 				},
 				javascript = { "prettierd", "prettier", stop_after_first = true },
 			},
@@ -40,12 +42,12 @@ return {
 				documentation = cmp.config.window.bordered(),
 			}
 			local mappings = cmp.mapping.preset.insert({
-				["<M-l>"] = cmp.mapping.complete(),
+				["<C-space>"] = cmp.mapping.complete(),
 				["<CR>"] = cmp.mapping.confirm({ select = true }),
 			})
-			local completion = {
-				autocomplete = false,
-			}
+			-- local completion = {
+			-- 	autocomplete = false,
+			-- }
 			local comparators = {
 				compare.offset,
 				compare.exact,
@@ -53,6 +55,9 @@ return {
 				compare.recently_used,
 				require("cmp-under-comparator").under,
 				compare.kind,
+			}
+			local completion = {
+				completeopt = "menu,menuone,fuzzy",
 			}
 			return {
 				sources = sources,

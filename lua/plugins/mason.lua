@@ -12,6 +12,7 @@ return {
 			ensure_installed = {
 				"lua_ls",
 				"basedpyright",
+				"ruff",
 			},
 		})
 		require("mason-lspconfig").setup_handlers({
@@ -40,15 +41,6 @@ return {
 		})
 
 		local null_ls = require("null-ls")
-		null_ls.setup({
-			sources = {
-				null_ls.builtins.diagnostics.mypy.with({
-					extra_args = function()
-						local virtual_env = os.getenv("VIRTUAL_ENV") or os.getenv("CONDA_DEFAULT_ENV") or "/usr"
-						return { "--python-executable", virtual_env .. "/bin/python3" }
-					end,
-				}),
-			},
-		})
+		null_ls.setup({})
 	end,
 }
