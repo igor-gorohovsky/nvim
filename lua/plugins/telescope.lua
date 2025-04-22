@@ -21,6 +21,8 @@ return {
 					"node_modules",
 					".git",
 					".venv",
+					".pytest_cache",
+					"__pycache__",
 				},
 			},
 			extensions = {
