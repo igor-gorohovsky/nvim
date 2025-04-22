@@ -7,6 +7,8 @@ o.smartindent = true
 o.tabstop = 4
 o.shiftwidth = 4
 
+o.number = true
+o.signcolumn = "number"
 o.relativenumber = true
 o.termguicolors = true
 o.laststatus = 0
@@ -16,7 +18,7 @@ o.splitright = true
 o.swapfile = false
 o.cursorline = true
 o.undofile = true
-o.completeopt = "menuone,noselect,noinsert,popup"
+-- o.completeopt = "menu,menuone"
 -- o.cmdheight = 0
 
 g.mapleader = " "
