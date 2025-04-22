@@ -4,6 +4,7 @@ local map = vim.keymap.set
 map("n", "<leader>q", ":q<cr>")
 map("n", "<leader>w", ":w<cr>")
 map("n", "s", "<Nop>") -- no map to map with symbols search
+vim.cmd([[cab wrap set wrap! \| set linebreak!]])
 
 -- Neotree
 -- map("n", "<leader>e", "<Cmd>Neotree <cr>")
