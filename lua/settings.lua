@@ -18,8 +18,7 @@ o.splitright = true
 o.swapfile = false
 o.cursorline = true
 o.undofile = true
--- o.completeopt = "menu,menuone"
--- o.cmdheight = 0
+o.scrolloff = 10
 
 g.mapleader = " "
 vim.wo.wrap = false
