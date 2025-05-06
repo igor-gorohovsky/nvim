@@ -3,12 +3,7 @@ local map = vim.keymap.set
 -- Common
 map("n", "<leader>q", ":q<cr>")
 map("n", "<leader>w", ":w<cr>")
-map("n", "s", "<Nop>") -- no map to map with symbols search
 vim.cmd([[cab wrap set wrap! \| set linebreak!]])
-
--- Neotree
--- map("n", "<leader>e", "<Cmd>Neotree <cr>")
--- map("n", "<leader>r", "<Cmd>Neotree reveal <cr>")
 
 -- Telescope File and Vim pickers
 local builtin = require("telescope.builtin")
@@ -21,9 +16,7 @@ map("n", "<leader>fh", builtin.help_tags)
 map("n", "<leader>fr", builtin.registers)
 map("n", "<leader>fk", builtin.keymaps)
 map("n", "<leader>fj", builtin.jumplist)
-map("n", "<leader>fs", "<cmd>SessionManager load_session<cr>")
-
--- Telescope LSP pickers
+map("n", "s", "<Nop>") -- no map to map with symbols search
 map("n", "ss", utils.lsp_document_symbols)
 map("n", "gr", builtin.lsp_references)
 map("n", "gd", builtin.lsp_definitions)
@@ -52,5 +45,17 @@ harpoon:extend({
 		end, { buffer = cx.bufnr })
 	end,
 })
--- LSP symbol rename
-map("n", "<leader>lr", vim.lsp.buf.rename)
+
+vim.api.nvim_create_autocmd("TermOpen", {
+	group = vim.api.nvim_create_augroup("terminal", { clear = true }),
+	callback = function()
+		vim.opt.number = false
+		vim.opt.relativenumber = false
+	end,
+})
+
+vim.keymap.set("n", "<leader>ib", function()
+	local breakpoint = { "breakpoint()" }
+	vim.api.nvim_put(breakpoint, "l", true, true)
+	vim.cmd("normal! ==")
+end)
