@@ -1,22 +1,24 @@
 return {
+	---@type LazySpec
 	{
-		"stevearc/oil.nvim",
-		dependencies = { { "echasnovski/mini.icons", opts = {} } },
-		lazy = false,
-		opts = function(opts)
-			local keymaps = {
-				["<C-v>"] = { "actions.select", opts = { vertical = true } },
-				["<C-x>"] = { "actions.select", opts = { horizontal = true } },
-			}
-			opts = vim.tbl_deep_extend("force", opts, { keymaps = keymaps })
-			return opts
-		end,
-		config = function(opts)
-			local oil = require("oil")
-
-			vim.keymap.set("n", "<leader>e", oil.toggle_float)
-
-			oil.setup(opts)
-		end,
+		"mikavilpas/yazi.nvim",
+		event = "VeryLazy",
+		dependencies = {
+			"folke/snacks.nvim",
+		},
+		keys = {
+			{
+				"<leader>e",
+				mode = { "n", "v" },
+				"<cmd>Yazi<cr>",
+				desc = "Open yazi at the current file",
+			},
+		},
+		---@type YaziConfig | {}
+		opts = {
+			keymaps = {
+				show_help = "<f1>",
+			},
+		},
 	},
 }
