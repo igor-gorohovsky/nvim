@@ -1,24 +1,13 @@
 return {
 	---@type LazySpec
 	{
-		"mikavilpas/yazi.nvim",
-		event = "VeryLazy",
-		dependencies = {
-			"folke/snacks.nvim",
-		},
-		keys = {
-			{
-				"<leader>e",
-				mode = { "n", "v" },
-				"<cmd>Yazi<cr>",
-				desc = "Open yazi at the current file",
-			},
-		},
-		---@type YaziConfig | {}
-		opts = {
-			keymaps = {
-				show_help = "<f1>",
-			},
-		},
+		"stevearc/oil.nvim",
+		---@module 'oil'
+		---@type oil.SetupOpts
+		opts = {},
+		dependencies = { { "echasnovski/mini.icons", opts = {} } },
+		-- dependencies = { "nvim-tree/nvim-web-devicons" }, -- use if you prefer nvim-web-devicons
+		-- Lazy loading is not recommended because it is very tricky to make it work correctly in all situations.
+		lazy = false,
 	},
 }
