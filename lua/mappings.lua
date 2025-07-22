@@ -10,6 +10,7 @@ local builtin = require("telescope.builtin")
 local utils = require("utils.telescope")
 
 map("n", "<leader>ff", utils.find_files)
+map("n", "<leader>e", "<CMD>Oil<CR>")
 map("n", "<leader>fb", builtin.buffers)
 map("n", "<leader>fw", builtin.live_grep)
 map("n", "<leader>fh", builtin.help_tags)

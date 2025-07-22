@@ -13,7 +13,7 @@ return {
 			"nvim-tree/nvim-web-devicons",
 		},
 		opts = {
-			lang = "elixir",
+			lang = "python",
 		},
 	},
 }
