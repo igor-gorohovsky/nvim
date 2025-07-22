@@ -1,51 +1,14 @@
 return {
 	{
-		"neovim/nvim-lspconfig",
+		"folke/lazydev.nvim",
+		ft = "lua", -- only load on lua files
 		opts = {
-			servers = {
-				lua_ls = {},
-				basedpyright = {},
-				ruff = {},
+			library = {
+				-- See the configuration section for more details
+				-- Load luvit types when the `vim.uv` word is found
+				{ path = "${3rd}/luv/library", words = { "vim%.uv" } },
 			},
 		},
-		dependencies = {
-			{
-				"folke/lazydev.nvim",
-				ft = "lua", -- only load on lua files
-				opts = {
-					library = {
-						-- See the configuration section for more details
-						-- Load luvit types when the `vim.uv` word is found
-						{ path = "${3rd}/luv/library", words = { "vim%.uv" } },
-					},
-				},
-			},
-			{ "saghen/blink.cmp" },
-		},
-		lazy = false,
-		config = function(_, opts)
-			local lspconfig = require("lspconfig")
-			for server, config in pairs(opts.servers) do
-				config.capabilities = require("blink.cmp").get_lsp_capabilities(config.capabilities)
-				config.on_attach = function(client, bufnr)
-					client.server_capabilities.semanticTokensProvider = nil
-
-					if client.name == "ruff" then
-						client.server_capabilities.hoverProvider = nil
-					end
-				end
-				lspconfig[server].setup(config)
-
-				vim.diagnostic.config({
-					virtual_text = false,
-					underline = true,
-					signs = false,
-				})
-				vim.keymap.set("n", "<leader>ld", vim.diagnostic.open_float)
-				vim.keymap.set("n", "<leader>lr", vim.lsp.buf.rename)
-				vim.keymap.set("n", "<leader>la", vim.lsp.buf.code_action)
-			end
-		end,
 	},
 	{
 		"saghen/blink.cmp",
@@ -56,7 +19,7 @@ return {
 		opts = {
 			keymap = { preset = "enter" },
 			sources = {
-				default = { "lsp", "path", "buffer", "lazydev" },
+				default = { "lsp", "path", "lazydev" },
 				providers = {
 					lazydev = {
 						name = "LazyDev",
@@ -72,8 +35,7 @@ return {
 			},
 			completion = {
 				accept = { auto_brackets = { enabled = false } },
-				ghost_text = { enabled = true },
-				documentation = { auto_show = true, auto_show_delay_ms = 200 },
+				ghost_text = { enabled = false },
 			},
 			signature = { enabled = true },
 		},

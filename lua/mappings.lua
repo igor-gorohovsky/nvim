@@ -22,6 +22,15 @@ map("n", "gr", builtin.lsp_references)
 map("n", "gd", builtin.lsp_definitions)
 map("n", "<leader>fd", builtin.diagnostics)
 
+local hop = require("hop")
+local directions = require("hop.hint").HintDirection
+map("", "s", function()
+	hop.hint_char1({ direction = directions.AFTER_CURSOR })
+end, { remap = true })
+map("", "S", function()
+	hop.hint_char1({ direction = directions.BEFORE_CURSOR })
+end, { remap = true })
+
 -- Harpoon mappings
 local harpoon = require("harpoon")
 map("n", "mm", function()
