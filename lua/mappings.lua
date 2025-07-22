@@ -17,9 +17,10 @@ map("n", "<leader>fr", builtin.registers)
 map("n", "<leader>fk", builtin.keymaps)
 map("n", "<leader>fj", builtin.jumplist)
 map("n", "s", "<Nop>") -- no map to map with symbols search
-map("n", "ss", utils.lsp_document_symbols)
+map("n", "<leader>fs", utils.lsp_document_symbols)
 map("n", "gr", builtin.lsp_references)
 map("n", "gd", builtin.lsp_definitions)
+map("n", "<leader>ld", vim.diagnostic.open_float)
 map("n", "<leader>fd", builtin.diagnostics)
 
 local hop = require("hop")
