@@ -28,13 +28,20 @@ local now, later = MiniDeps.now, MiniDeps.later
 local now_if_args = _G.Config.now_if_args
 
 -- Step one ===================================================================
+-- Add custom theme in development mode
+local add = MiniDeps.add
+now(function()
+  add({ source = vim.fn.expand('~/projects/pustota.nvim') })
+  vim.cmd('colorscheme pustota')
+end)
+
 -- Enable 'miniwinter' color scheme. It comes with 'mini.nvim' and uses 'mini.hues'.
 --
 -- See also:
 -- - `:h mini.nvim-color-schemes` - list of other color schemes
 -- - `:h MiniHues-examples` - how to define highlighting with 'mini.hues'
 -- - 'plugin/40_plugins.lua' honorable mentions - other good color schemes
-now(function() vim.cmd('colorscheme miniwinter') end)
+-- now(function() vim.cmd('colorscheme miniwinter') end)
 
 -- You can try these other 'mini.hues'-based color schemes (uncomment with `gcc`):
 -- now(function() vim.cmd('colorscheme minispring') end)
@@ -103,17 +110,6 @@ now(function() require('mini.notify').setup() end)
 -- - `<Leader>sd` - delete previously started session
 now(function() require('mini.sessions').setup() end)
 
--- Start screen. This is what is shown when you open Neovim like `nvim`.
--- Example usage:
--- - Type prefix keys to limit available candidates
--- - Navigate down/up with `<C-n>` and `<C-p>`
--- - Press `<CR>` to select an entry
---
--- See also:
--- - `:h MiniStarter-example-config` - non-default config examples
--- - `:h MiniStarter-lifecycle` - how to work with Starter buffer
-now(function() require('mini.starter').setup() end)
-
 -- Statusline. Sets `:h 'statusline'` to show more info in a line below window.
 -- Example usage:
 -- - Left most section indicates current mode (text + highlighting).
@@ -126,10 +122,6 @@ now(function() require('mini.starter').setup() end)
 -- - `:h MiniStatusline-example-content` - example of default content. Use it to
 --   configure a custom statusline by setting `config.content.active` function.
 now(function() require('mini.statusline').setup() end)
-
--- Tabline. Sets `:h 'tabline'` to show all listed buffers in a line at the top.
--- Buffers are ordered as they were created. Navigate with `[b` and `]b`.
-now(function() require('mini.tabline').setup() end)
 
 -- Step one or two ============================================================
 -- Load now if Neovim is started like `nvim -- path/to/file`, otherwise - later.
@@ -297,7 +289,7 @@ later(function() require('mini.align').setup() end)
 --
 -- See also:
 -- - `:h MiniBracketed` - overall mapping design and list of targets
-later(function() require('mini.bracketed').setup() end)
+later(function() require('mini.bracketed').setup({ comment = { suffix = '' } }) end)
 
 -- Remove buffers. Opened files occupy space in tabline and buffer picker.
 -- When not needed, they can be removed. Example usage:
@@ -348,16 +340,16 @@ later(function()
     -- Explicitly opt-in for set of common keys to trigger clue window
     triggers = {
       { mode = { 'n', 'x' }, keys = '<Leader>' }, -- Leader triggers
-      { mode =   'n',        keys = '\\' },       -- mini.basics
+      { mode = 'n',          keys = '\\' },       -- mini.basics
       { mode = { 'n', 'x' }, keys = '[' },        -- mini.bracketed
       { mode = { 'n', 'x' }, keys = ']' },
-      { mode =   'i',        keys = '<C-x>' },    -- Built-in completion
+      { mode = 'i',          keys = '<C-x>' },    -- Built-in completion
       { mode = { 'n', 'x' }, keys = 'g' },        -- `g` key
       { mode = { 'n', 'x' }, keys = "'" },        -- Marks
       { mode = { 'n', 'x' }, keys = '`' },
       { mode = { 'n', 'x' }, keys = '"' },        -- Registers
       { mode = { 'i', 'c' }, keys = '<C-r>' },
-      { mode =   'n',        keys = '<C-w>' },    -- Window commands
+      { mode = 'n',          keys = '<C-w>' },    -- Window commands
       { mode = { 'n', 'x' }, keys = 's' },        -- `s` key (mini.surround, etc.)
       { mode = { 'n', 'x' }, keys = 'z' },        -- `z` key
     },
@@ -401,22 +393,6 @@ later(function() require('mini.comment').setup() end)
 -- It is not enabled by default because its effects are a matter of taste.
 -- Uncomment next line (use `gcc`) to enable.
 -- later(function() require('mini.cursorword').setup() end)
-
--- Work with diff hunks that represent the difference between the buffer text and
--- some reference text set by a source. Default source uses text from Git index.
--- Also provides summary info used in developer section of 'mini.statusline'.
--- Example usage:
--- - `ghip` - apply hunks (`gh`) within *i*nside *p*aragraph
--- - `gHG` - reset hunks (`gH`) from cursor until end of buffer (`G`)
--- - `ghgh` - apply (`gh`) hunk at cursor (`gh`)
--- - `gHgh` - reset (`gH`) hunk at cursor (`gh`)
--- - `<Leader>go` - toggle overlay
---
--- See also:
--- - `:h MiniDiff-overview` - overview of how module works
--- - `:h MiniDiff-diff-summary` - available summary information
--- - `:h MiniDiff.gen_source` - available built-in sources
-later(function() require('mini.diff').setup() end)
 
 -- Navigate and manipulate file system
 --
@@ -462,20 +438,6 @@ later(function()
   end
   _G.Config.new_autocmd('User', 'MiniFilesExplorerOpen', add_marks, 'Add bookmarks')
 end)
-
--- Git integration for more straightforward Git actions based on Neovim's state.
--- It is not meant as a fully featured Git client, only to provide helpers that
--- integrate better with Neovim. Example usage:
--- - `<Leader>gs` - show information at cursor
--- - `<Leader>gd` - show unstaged changes as a patch in separate tabpage
--- - `<Leader>gL` - show Git log of current file
--- - `:Git help git` - show output of `git help git` inside Neovim
---
--- See also:
--- - `:h MiniGit-examples` - examples of common setups
--- - `:h :Git` - more details about `:Git` user command
--- - `:h MiniGit.show_at_cursor()` - what information at cursor is shown
-later(function() require('mini.git').setup() end)
 
 -- Highlight patterns in text. Like `TODO`/`NOTE` or color hex codes.
 -- Example usage:
@@ -571,10 +533,9 @@ later(function()
   map.setup({
     -- Use Braille dots to encode text
     symbols = { encode = map.gen_encode_symbols.dot('4x2') },
-    -- Show built-in search matches, 'mini.diff' hunks, and diagnostic entries
+    -- Show built-in search matches and diagnostic entries
     integrations = {
       map.gen_integration.builtin_search(),
-      map.gen_integration.diff(),
       map.gen_integration.diagnostic(),
     },
   })
@@ -582,9 +543,9 @@ later(function()
   -- Map built-in navigation characters to force map refresh
   for _, key in ipairs({ 'n', 'N', '*', '#' }) do
     local rhs = key
-      -- Also open enough folds when jumping to the next match
-      .. 'zv'
-      .. '<Cmd>lua MiniMap.refresh({}, { lines = false, scrollbar = false })<CR>'
+        -- Also open enough folds when jumping to the next match
+        .. 'zv'
+        .. '<Cmd>lua MiniMap.refresh({}, { lines = false, scrollbar = false })<CR>'
     vim.keymap.set('n', key, rhs)
   end
 end)

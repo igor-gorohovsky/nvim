@@ -54,15 +54,16 @@ now_if_args(function()
   -- After changing this, restart Neovim once to install necessary parsers. Wait
   -- for the installation to finish before opening a file for added language(s).
   local languages = {
-    -- These are already pre-installed with Neovim. Used as an example.
     'lua',
     'vimdoc',
     'markdown',
-    -- Add here more languages with which you want to use tree-sitter
-    -- To see available languages:
-    -- - Execute `:=require('nvim-treesitter').get_available()`
-    -- - Visit 'SUPPORTED_LANGUAGES.md' file at
-    --   https://github.com/nvim-treesitter/nvim-treesitter/blob/main
+    'python',
+    'javascript',
+    'typescript',
+    'tsx',
+    'jsx',
+    'css',
+    'html',
   }
   local isnt_installed = function(lang)
     return #vim.api.nvim_get_runtime_file('parser/' .. lang .. '.*', false) == 0
@@ -101,11 +102,29 @@ now_if_args(function()
 
   -- Use `:h vim.lsp.enable()` to automatically enable language server based on
   -- the rules provided by 'nvim-lspconfig'.
-  -- Use `:h vim.lsp.config()` or 'after/lsp/' directory to configure servers.
-  -- Uncomment and tweak the following `vim.lsp.enable()` call to enable servers.
-  -- vim.lsp.enable({
-  --   -- For example, if `lua-language-server` is installed, use `'lua_ls'` entry
-  -- })
+  -- Use `:h vim.lsp.config()` or 'lsp/' directory to configure servers.
+  vim.lsp.enable({
+    'lua_ls',
+    'basedpyright',
+    'ruff',
+    'ts_ls',
+    'cssls',
+    'html',
+  })
+
+  -- Disable semantic tokens for all LSP servers (required for pustota theme).
+  -- Also disable ruff's hover so basedpyright provides it.
+  vim.api.nvim_create_autocmd('LspAttach', {
+    callback = function(args)
+      local client = vim.lsp.get_client_by_id(args.data.client_id)
+      if client then
+        client.server_capabilities.semanticTokensProvider = nil
+        if client.name == 'ruff' then
+          client.server_capabilities.hoverProvider = false
+        end
+      end
+    end,
+  })
 end)
 
 -- Formatting =================================================================
@@ -125,12 +144,50 @@ later(function()
   -- - `:h conform-formatters`
   require('conform').setup({
     default_format_opts = {
-      -- Allow formatting from LSP server if no dedicated formatter is available
       lsp_format = 'fallback',
     },
-    -- Map of filetype to formatters
-    -- Make sure that necessary CLI tool is available
-    -- formatters_by_ft = { lua = { 'stylua' } },
+    formatters_by_ft = {
+      javascript = { 'prettier' },
+      javascriptreact = { 'prettier' },
+      typescript = { 'prettier' },
+      typescriptreact = { 'prettier' },
+      css = { 'prettier' },
+      scss = { 'prettier' },
+      less = { 'prettier' },
+      html = { 'prettier' },
+      json = { 'prettier' },
+      jsonc = { 'prettier' },
+      yaml = { 'prettier' },
+      markdown = { 'prettier' },
+      python = { 'ruff_organize_imports', 'ruff_format' },
+    },
+  })
+end)
+
+-- Snippets ===================================================================
+
+-- Diff ========================================================================
+
+-- 'sindrets/diffview.nvim' provides a single tabpage interface for reviewing
+-- all Git changes. Shows a file tree panel with changed files and corresponding
+-- diffs. Ideal for reviewing AI-generated or multi-file changes.
+--
+-- Key mappings:
+-- - `<Leader>gd` - open diff view for current branch changes
+-- - `<Leader>gD` - open diff view for all local changes (including staged)
+-- - `<Leader>gh` - show file history (all commits for current file)
+-- - `<Leader>gH` - show file history for current buffer
+later(function()
+  add({
+    source = 'sindrets/diffview.nvim',
+    depends = { 'nvim-lua/plenary.nvim' },
+  })
+
+  require('diffview').setup({
+    enhanced_diff_hl = true,
+    view = {
+      merge_tool = { layout = 'diff3_mixed' },
+    },
   })
 end)
 
