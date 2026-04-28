@@ -93,6 +93,9 @@ vim.o.completeopt = 'menuone,noselect,fuzzy,nosort' -- Use custom behavior
 local f = function() vim.cmd('setlocal formatoptions-=c formatoptions-=o') end
 _G.Config.new_autocmd('FileType', nil, f, "Proper 'formatoptions'")
 
+-- Re-equalize window splits when terminal is resized (e.g. zellij Alt-z fullscreen toggle).
+_G.Config.new_autocmd('VimResized', nil, function() vim.cmd('wincmd =') end, 'Equalize splits on resize')
+
 -- There are other autocommands created by 'mini.basics'. See 'plugin/30_mini.lua'.
 
 -- Diagnostics ================================================================
