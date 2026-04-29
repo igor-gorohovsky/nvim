@@ -65,6 +65,8 @@ _G.Config.leader_group_clues = {
   { mode = 'x', keys = '<Leader>g', desc = '+Git' },
 
   { mode = 'x', keys = '<Leader>l', desc = '+Language' },
+
+  { mode = 'x', keys = '<Leader>c', desc = '+Claude' },
 }
 
 -- Helpers for a more concise `<Leader>` mappings.
