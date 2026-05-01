@@ -1,12 +1,14 @@
 local M = {}
 
 local ns = vim.api.nvim_create_namespace("claude_comments")
-local hl_group = "ClaudeComment"
+local hl_group = "ClaudeCommentNr"
 local group = vim.api.nvim_create_augroup("ClaudeComments", { clear = true })
 
-vim.api.nvim_set_hl(0, hl_group, { bg = "#3a2e2e", default = true })
+vim.api.nvim_set_hl(0, hl_group, { fg = "#ff9e64", bold = true, default = true })
 
 local comments = {}
+local mark_index = {}
+local next_comment_id = 0
 
 local function selection_lines()
   local s = vim.fn.line("v")
@@ -20,7 +22,28 @@ local function exit_visual()
   vim.api.nvim_feedkeys(esc, "n", false)
 end
 
-function M.add()
+local function place_marks(bufnr, s_row, e_row)
+  local ids = {}
+  for row = s_row, e_row do
+    local id = vim.api.nvim_buf_set_extmark(bufnr, ns, row, 0, {
+      number_hl_group = hl_group,
+    })
+    table.insert(ids, id)
+  end
+  return ids
+end
+
+local function remove_comment(bufnr, comment_id)
+  local entry = comments[bufnr] and comments[bufnr][comment_id]
+  if not entry then return end
+  for _, mid in ipairs(entry.marks) do
+    pcall(vim.api.nvim_buf_del_extmark, bufnr, ns, mid)
+    if mark_index[bufnr] then mark_index[bufnr][mid] = nil end
+  end
+  comments[bufnr][comment_id] = nil
+end
+
+local function add_with_callback(on_done)
   local s_row, e_row = selection_lines()
   local bufnr = vim.api.nvim_get_current_buf()
   exit_visual()
@@ -30,41 +53,58 @@ function M.add()
       if not input or input == "" then return end
 
       comments[bufnr] = comments[bufnr] or {}
+      mark_index[bufnr] = mark_index[bufnr] or {}
+
       local overlapping = vim.api.nvim_buf_get_extmarks(
         bufnr, ns, { s_row, 0 }, { e_row, -1 },
-        { details = true, overlap = true }
+        { overlap = true }
       )
+      local seen = {}
       for _, m in ipairs(overlapping) do
-        local id = m[1]
-        if comments[bufnr][id] then
-          vim.api.nvim_buf_del_extmark(bufnr, ns, id)
-          comments[bufnr][id] = nil
+        local cid = mark_index[bufnr][m[1]]
+        if cid and not seen[cid] then
+          seen[cid] = true
+          remove_comment(bufnr, cid)
         end
       end
 
-      local last_line = vim.api.nvim_buf_get_lines(bufnr, e_row, e_row + 1, false)[1] or ""
-      local id = vim.api.nvim_buf_set_extmark(bufnr, ns, s_row, 0, {
-        end_row = e_row,
-        end_col = #last_line,
-        hl_group = hl_group,
-        hl_eol = true,
-      })
-      comments[bufnr][id] = input
+      local marks = place_marks(bufnr, s_row, e_row)
+      next_comment_id = next_comment_id + 1
+      local cid = next_comment_id
+      comments[bufnr][cid] = { text = input, marks = marks }
+      for _, mid in ipairs(marks) do
+        mark_index[bufnr][mid] = cid
+      end
+
+      if on_done then on_done() end
     end)
+  end)
+end
+
+function M.add()
+  add_with_callback(nil)
+end
+
+function M.add_and_send()
+  add_with_callback(function()
+    M.send()
   end)
 end
 
 function M.peek()
   local bufnr = vim.api.nvim_get_current_buf()
   local mapping = comments[bufnr]
-  if not mapping then return end
+  local idx = mark_index[bufnr]
+  if not mapping or not idx then return end
   local row = vim.fn.line(".") - 1
-  local marks = vim.api.nvim_buf_get_extmarks(bufnr, ns, 0, -1, { details = true })
+  local marks = vim.api.nvim_buf_get_extmarks(
+    bufnr, ns, { row, 0 }, { row, -1 }, { overlap = true }
+  )
   for _, m in ipairs(marks) do
-    local id, mr, _, det = m[1], m[2], m[3], m[4]
-    local er = (det and det.end_row) or mr
-    if row >= mr and row <= er and mapping[id] then
-      vim.lsp.util.open_floating_preview({ "Claude comment:", mapping[id] }, "markdown", {
+    local cid = idx[m[1]]
+    local entry = cid and mapping[cid]
+    if entry then
+      vim.lsp.util.open_floating_preview({ "Claude comment:", entry.text }, "markdown", {
         border = "rounded",
         focus = false,
         focusable = false,
@@ -93,18 +133,22 @@ local function collect(bufnrs, path_overrides)
         rel = vim.fn.fnamemodify(fname, ":.")
         if rel == "" then rel = "[no name]" end
       end
-      for id, text in pairs(mapping) do
-        local pos = vim.api.nvim_buf_get_extmark_by_id(bufnr, ns, id, { details = true })
-        if pos and pos[1] then
-          local sr = pos[1]
-          local er = (pos[3] and pos[3].end_row) or sr
+      for _, entry in pairs(mapping) do
+        local rows = {}
+        for _, mid in ipairs(entry.marks) do
+          local pos = vim.api.nvim_buf_get_extmark_by_id(bufnr, ns, mid, {})
+          if pos and pos[1] then table.insert(rows, pos[1]) end
+        end
+        if #rows > 0 then
+          table.sort(rows)
+          local sr, er = rows[1], rows[#rows]
           local snippet = vim.api.nvim_buf_get_lines(bufnr, sr, er + 1, false)
           table.insert(items, {
             file = rel,
             start_line = sr + 1,
             end_line = er + 1,
             snippet = snippet,
-            text = text,
+            text = entry.text,
           })
         end
       end
@@ -179,6 +223,7 @@ function M.clear(bufnrs)
         vim.api.nvim_buf_clear_namespace(bufnr, ns, 0, -1)
       end
       comments[bufnr] = nil
+      mark_index[bufnr] = nil
     end
     return
   end
@@ -188,12 +233,14 @@ function M.clear(bufnrs)
     end
   end
   comments = {}
+  mark_index = {}
 end
 
 vim.api.nvim_create_autocmd("BufWipeout", {
   group = group,
   callback = function(args)
     comments[args.buf] = nil
+    mark_index[args.buf] = nil
   end,
 })
 

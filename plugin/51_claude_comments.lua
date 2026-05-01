@@ -6,6 +6,10 @@ vim.keymap.set("n", "<Leader>cs", function()
   require("claude_comments").send()
 end, { desc = "Send Claude comments via zellij" })
 
+vim.keymap.set("x", "<Leader>cs", function()
+  require("claude_comments").add_and_send()
+end, { desc = "Add Claude comment on selection and send" })
+
 vim.keymap.set("n", "<Leader>cx", function()
   require("claude_comments").clear()
 end, { desc = "Clear all Claude comments" })
