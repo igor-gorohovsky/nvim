@@ -6,6 +6,25 @@ local pause_file = vim.fn.expand("~/.cache/claude-review-paused")
 
 local group = vim.api.nvim_create_augroup("ClaudeReview", { clear = true })
 
+local lnum_ns = vim.api.nvim_create_namespace("claude_review_lnum")
+
+local function decorate_lnums(buf, win)
+  vim.api.nvim_buf_clear_namespace(buf, lnum_ns, 0, -1)
+  local count = vim.api.nvim_buf_line_count(buf)
+  vim.api.nvim_win_call(win, function()
+    for lnum = 1, count do
+      local hl_id = vim.fn.diff_hlID(lnum, 1)
+      if hl_id ~= 0 then
+        local name = vim.fn.synIDattr(hl_id, "name")
+        local target = name == "DiffDelete" and "DiffDeleteLn" or "DiffAddLn"
+        vim.api.nvim_buf_set_extmark(buf, lnum_ns, lnum - 1, 0, {
+          number_hl_group = target,
+        })
+      end
+    end
+  end)
+end
+
 local function write_fifo(line)
   if not state then return end
   local fifo = state.fifo
@@ -107,13 +126,20 @@ function M.start(opts)
 
   vim.cmd("edit " .. vim.fn.fnameescape(opts.file))
   local file_buf = vim.api.nvim_get_current_buf()
+  local file_win = vim.api.nvim_get_current_win()
   vim.cmd("vert diffsplit " .. vim.fn.fnameescape(opts.pending))
 
   local pending_buf = vim.api.nvim_get_current_buf()
+  local pending_win = vim.api.nvim_get_current_win()
   state.pending_buf = pending_buf
   state.review_buffers = { file_buf, pending_buf }
 
   vim.diagnostic.enable(false, { bufnr = pending_buf })
+
+  vim.schedule(function()
+    decorate_lnums(file_buf, file_win)
+    decorate_lnums(pending_buf, pending_win)
+  end)
 
   local map = function(lhs, fn, desc)
     vim.keymap.set("n", lhs, fn, {
